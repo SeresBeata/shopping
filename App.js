@@ -5,6 +5,8 @@ import { getFirestore } from 'firebase/firestore';
 // import react Navigation
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+// import Shoppinglists
+import ShoppingLists from './components/ShoppingLists';
 
 // Create the navigator
 const Stack = createNativeStackNavigator();
