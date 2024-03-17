@@ -2,6 +2,12 @@ import { StyleSheet, Text, View } from 'react-native';
 //To initialize a connection for Firestore import initializeApp() and getFirestore()
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+// import react Navigation
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+// Create the navigator
+const Stack = createNativeStackNavigator();
 
 const App = () => {
   //Firebase configuration
@@ -21,19 +27,10 @@ const App = () => {
   const db = getFirestore(app);
 
   return (
-    <View style={styles.container}>
-      <Text>Hello World!</Text>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator></Stack.Navigator>
+    </NavigationContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
 
 export default App;
