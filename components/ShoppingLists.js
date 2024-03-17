@@ -31,10 +31,12 @@ const ShoppingLists = ({ db }) => {
         //use lists state
         data={lists}
         renderItem={({ item }) => (
-          <Text>
-            {/* use array function join() that converts an array into a string and adds a separator string between each element from the array once concatenated */}
-            {item.name}: {item.items.join(', ')}
-          </Text>
+          <View style={styles.listItem}>
+            <Text>
+              {/* use array function join() that converts an array into a string and adds a separator string between each element from the array once concatenated */}
+              {item.name}: {item.items.join(', ')}
+            </Text>
+          </View>
         )}
       />
     </View>
