@@ -1,5 +1,12 @@
 import { useState, useEffect } from 'react';
-import { View, FlatList, StyleSheet, Text } from 'react-native';
+import {
+  View,
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native';
 // import the getDocs and collections functions
 import { collection, getDocs } from 'firebase/firestore';
 
@@ -7,6 +14,11 @@ import { collection, getDocs } from 'firebase/firestore';
 const ShoppingLists = ({ db }) => {
   //create state variable with initial state empty array
   const [lists, setLists] = useState([]);
+
+  //create state variables for TextInput values
+  const [listName, setListName] = useState('');
+  const [item1, setItem1] = useState('');
+  const [item2, setItem2] = useState('');
 
   //getting all documents of a collection by  creating an async function outside useEffect()
   const fetchShoppingLists = async () => {
@@ -39,6 +51,29 @@ const ShoppingLists = ({ db }) => {
           </View>
         )}
       />
+      <View style={styles.listForm}>
+        <TextInput
+          style={styles.listName}
+          placeholder="List Name"
+          value={listName}
+          onChangeText={setListName}
+        />
+        <TextInput
+          style={styles.item}
+          placeholder="Item #1"
+          value={item1}
+          onChangeText={setItem1}
+        />
+        <TextInput
+          style={styles.item}
+          placeholder="Item #2"
+          value={item2}
+          onChangeText={setItem2}
+        />
+        <TouchableOpacity style={styles.addButton} onPress={() => {}}>
+          <Text style={styles.addButtonText}>Add</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
