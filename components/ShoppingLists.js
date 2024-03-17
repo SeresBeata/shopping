@@ -8,9 +8,10 @@ import {
   TouchableOpacity,
   Platform,
   KeyboardAvoidingView,
+  Alert,
 } from 'react-native';
-// import the getDocs and collections functions
-import { collection, getDocs } from 'firebase/firestore';
+// import the getDocs, collections and addDoc functions
+import { collection, getDocs, addDoc } from 'firebase/firestore';
 
 //create and export ShoppingLists child component
 const ShoppingLists = ({ db }) => {
@@ -30,6 +31,17 @@ const ShoppingLists = ({ db }) => {
       newLists.push({ id: docObject.id, ...docObject.data() });
     });
     setLists(newLists);
+  };
+
+  //create async function to add new list
+  const addShoppingList = async (newList) => {
+    const newListRef = await addDoc(collection(db, 'shoppinglists'), newList);
+    if (newListRef.id) {
+      setLists([newList, ...lists]);
+      Alert.alert(`The list "${listName}" has been added.`);
+    } else {
+      Alert.alert('Unable to add. Please try later');
+    }
   };
 
   //use useEffect
@@ -72,7 +84,16 @@ const ShoppingLists = ({ db }) => {
           value={item2}
           onChangeText={setItem2}
         />
-        <TouchableOpacity style={styles.addButton} onPress={() => {}}>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() => {
+            const newList = {
+              name: listName,
+              items: [item1, item2],
+            };
+            addShoppingList(newList);
+          }}
+        >
           <Text style={styles.addButtonText}>Add</Text>
         </TouchableOpacity>
       </View>
