@@ -31,7 +31,7 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="ShoppingLists">
-        <Stack.Screen name="ShoppingLists" component={ShoppingLists}>
+        <Stack.Screen name="ShoppingLists">
           {/* pass db props to the ShoppingLists component */}
           {(props) => <ShoppingLists db={db} {...props} />}
         </Stack.Screen>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, FlatList } from 'react-native';
+import { View, FlatList, StyleSheet, Text } from 'react-native';
 // import the getDocs and collections functions
 import { collection, getDocs } from 'firebase/firestore';
 
