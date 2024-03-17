@@ -30,7 +30,9 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator></Stack.Navigator>
+      <Stack.Navigator initialRouteName="ShoppingLists">
+        <Stack.Screen name="ShoppingLists" component={ShoppingLists} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 };
