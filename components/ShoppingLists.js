@@ -6,6 +6,8 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Platform,
+  KeyboardAvoidingView,
 } from 'react-native';
 // import the getDocs and collections functions
 import { collection, getDocs } from 'firebase/firestore';
@@ -74,6 +76,9 @@ const ShoppingLists = ({ db }) => {
           <Text style={styles.addButtonText}>Add</Text>
         </TouchableOpacity>
       </View>
+      {Platform.OS === 'android' ? (
+        <KeyboardAvoidingView behavior="height" />
+      ) : null}
     </View>
   );
 };
