@@ -10,8 +10,8 @@ import {
   KeyboardAvoidingView,
   Alert,
 } from 'react-native';
-// import the getDocs, collections and addDoc functions
-import { collection, getDocs, addDoc } from 'firebase/firestore';
+// import the getDocs, collections, addDoc and onSnapshot functions
+import { collection, getDocs, addDoc, onSnapshot } from 'firebase/firestore';
 
 //create and export ShoppingLists child component
 const ShoppingLists = ({ db }) => {
@@ -35,7 +35,26 @@ const ShoppingLists = ({ db }) => {
   };
 
   //use useEffect
-  useEffect(() => {}, []);
+  //use onSnapshot() that returns the listener unsubscribe function, which is referenced with unsubShoppingLists
+  useEffect(() => {
+    // code to execute when component mounted or updated
+    const unsubShoppinglists = onSnapshot(
+      collection(db, 'shoppinglists'),
+      (documentsSnapshot) => {
+        let newLists = [];
+        documentsSnapshot.forEach((doc) => {
+          newLists.push({ id: doc.id, ...doc.data() });
+        });
+        setLists(newLists);
+      }
+    );
+
+    //code to execute when the component will be unmounted
+    //add if statement to check if the unsubShoppingLists isn't undefined. This is a protection procedure in case the onSnapshot() function call fails.
+    return () => {
+      if (unsubShoppinglists) unsubShoppinglists();
+    };
+  }, []);
 
   return (
     <View style={styles.container}>
