@@ -7,6 +7,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 // import Shoppinglists
 import ShoppingLists from './components/ShoppingLists';
+//import Welcome
+import Welcome from './components/Welcome';
 
 // Create the navigator
 const Stack = createNativeStackNavigator();
@@ -30,7 +32,8 @@ const App = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="ShoppingLists">
+      <Stack.Navigator initialRouteName="Welcome">
+        <Stack.Screen name="Welcome" component={Welcome} />
         <Stack.Screen name="ShoppingLists">
           {/* pass db props to the ShoppingLists component */}
           {(props) => <ShoppingLists db={db} {...props} />}
