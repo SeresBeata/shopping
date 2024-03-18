@@ -10,11 +10,21 @@ import {
   KeyboardAvoidingView,
   Alert,
 } from 'react-native';
-// import the getDocs, collections, addDoc and onSnapshot functions
-import { collection, getDocs, addDoc, onSnapshot } from 'firebase/firestore';
+// import the getDocs, collections, addDoc, onSnapshot, query, where functions
+import {
+  collection,
+  getDocs,
+  addDoc,
+  onSnapshot,
+  query,
+  where,
+} from 'firebase/firestore';
 
 //create and export ShoppingLists child component
-const ShoppingLists = ({ db }) => {
+const ShoppingLists = ({ db, route }) => {
+  //use userID, extract it from route.params
+  const { userID } = route.params;
+
   //create state variable with initial state empty array
   const [lists, setLists] = useState([]);
 
@@ -37,17 +47,21 @@ const ShoppingLists = ({ db }) => {
   //use useEffect
   //use onSnapshot() that returns the listener unsubscribe function, which is referenced with unsubShoppingLists
   useEffect(() => {
-    // code to execute when component mounted or updated
-    const unsubShoppinglists = onSnapshot(
+    //use query, where functions to confirm that users can only see their own shopping lists
+    //Define the query reference in a separate line to make easier to read
+    const q = query(
       collection(db, 'shoppinglists'),
-      (documentsSnapshot) => {
-        let newLists = [];
-        documentsSnapshot.forEach((doc) => {
-          newLists.push({ id: doc.id, ...doc.data() });
-        });
-        setLists(newLists);
-      }
+      where('uid', '==', userID)
     );
+
+    // code to execute when component mounted or updated
+    const unsubShoppinglists = onSnapshot(q, (documentsSnapshot) => {
+      let newLists = [];
+      documentsSnapshot.forEach((doc) => {
+        newLists.push({ id: doc.id, ...doc.data() });
+      });
+      setLists(newLists);
+    });
 
     //code to execute when the component will be unmounted
     //add if statement to check if the unsubShoppingLists isn't undefined. This is a protection procedure in case the onSnapshot() function call fails.
@@ -94,6 +108,7 @@ const ShoppingLists = ({ db }) => {
           style={styles.addButton}
           onPress={() => {
             const newList = {
+              uid: userID,
               name: listName,
               items: [item1, item2],
             };
