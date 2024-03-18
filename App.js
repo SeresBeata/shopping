@@ -9,6 +9,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import ShoppingLists from './components/ShoppingLists';
 //import Welcome
 import Welcome from './components/Welcome';
+//import and use Logbox to prevent warning message from appearing
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['AsyncStorage has been extracted from']);
 
 // Create the navigator
 const Stack = createNativeStackNavigator();
