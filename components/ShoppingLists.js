@@ -23,16 +23,6 @@ const ShoppingLists = ({ db }) => {
   const [item1, setItem1] = useState('');
   const [item2, setItem2] = useState('');
 
-  //getting all documents of a collection by  creating an async function outside useEffect()
-  const fetchShoppingLists = async () => {
-    const listsDocuments = await getDocs(collection(db, 'shoppinglists'));
-    let newLists = [];
-    listsDocuments.forEach((docObject) => {
-      newLists.push({ id: docObject.id, ...docObject.data() });
-    });
-    setLists(newLists);
-  };
-
   //create async function to add new list
   const addShoppingList = async (newList) => {
     const newListRef = await addDoc(collection(db, 'shoppinglists'), newList);
@@ -45,10 +35,7 @@ const ShoppingLists = ({ db }) => {
   };
 
   //use useEffect
-  // call fetchShoppingLists() async function inside useEffect()
-  useEffect(() => {
-    fetchShoppingLists();
-  }, [`${lists}`]);
+  useEffect(() => {}, []);
 
   return (
     <View style={styles.container}>
