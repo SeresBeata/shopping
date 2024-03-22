@@ -47,32 +47,42 @@ const ShoppingLists = ({ db, route, isConnected }) => {
     }
   };
 
+  // declare the variable outside useEffect
+  let unsubShoppinglists;
+
   //use useEffect
   //use onSnapshot() that returns the listener unsubscribe function, which is referenced with unsubShoppingLists
   useEffect(() => {
-    //use query, where functions to confirm that users can only see their own shopping lists
-    //Define the query reference in a separate line to make easier to read
-    const q = query(
-      collection(db, 'shoppinglists'),
-      where('uid', '==', userID)
-    );
+    //fetch shopping lists from the Firestore Database only if there’s a network connection
+    if (isConnected === true) {
+      // unregister current onSnapshot() listener to avoid registering multiple listeners when useEffect code is re-executed.
+      if (unsubShoppinglists) unsubShoppinglists();
+      unsubShoppinglists = null;
 
-    // code to execute when component mounted or updated
-    const unsubShoppinglists = onSnapshot(q, (documentsSnapshot) => {
-      let newLists = [];
-      documentsSnapshot.forEach((doc) => {
-        newLists.push({ id: doc.id, ...doc.data() });
+      //use query, where functions to confirm that users can only see their own shopping lists
+      //Define the query reference in a separate line to make easier to read
+      const q = query(
+        collection(db, 'shoppinglists'),
+        where('uid', '==', userID)
+      );
+
+      // code to execute when component mounted or updated
+      const unsubShoppinglists = onSnapshot(q, (documentsSnapshot) => {
+        let newLists = [];
+        documentsSnapshot.forEach((doc) => {
+          newLists.push({ id: doc.id, ...doc.data() });
+        });
+        cacheShoppingLists(newLists);
+        setLists(newLists);
       });
-      cacheShoppingLists(newLists);
-      setLists(newLists);
-    });
+    } else loadCachedLists(); //if there’s no network connection call loadCachedLists()
 
     //code to execute when the component will be unmounted
     //add if statement to check if the unsubShoppingLists isn't undefined. This is a protection procedure in case the onSnapshot() function call fails.
     return () => {
       if (unsubShoppinglists) unsubShoppinglists();
     };
-  }, []);
+  }, [isConnected]);
 
   //use AsyncStorage.setItem() to cach data
   const cacheShoppingLists = async (listsToCache) => {
