@@ -24,7 +24,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 //create and export ShoppingLists child component
-const ShoppingLists = ({ db, route }) => {
+const ShoppingLists = ({ db, route, isConnected }) => {
   //use userID, extract it from route.params
   const { userID } = route.params;
 
