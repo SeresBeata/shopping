@@ -118,39 +118,42 @@ const ShoppingLists = ({ db, route, isConnected }) => {
           </View>
         )}
       />
-      <View style={styles.listForm}>
-        <TextInput
-          style={styles.listName}
-          placeholder="List Name"
-          value={listName}
-          onChangeText={setListName}
-        />
-        <TextInput
-          style={styles.item}
-          placeholder="Item #1"
-          value={item1}
-          onChangeText={setItem1}
-        />
-        <TextInput
-          style={styles.item}
-          placeholder="Item #2"
-          value={item2}
-          onChangeText={setItem2}
-        />
-        <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => {
-            const newList = {
-              uid: userID,
-              name: listName,
-              items: [item1, item2],
-            };
-            addShoppingList(newList);
-          }}
-        >
-          <Text style={styles.addButtonText}>Add</Text>
-        </TouchableOpacity>
-      </View>
+      {/* use ternary-operator-based conditional that checks the isConnected state. If it’s true, the form will be rendered; otherwise, nothing (null) will be rendered */}
+      {isConnected === true ? (
+        <View style={styles.listForm}>
+          <TextInput
+            style={styles.listName}
+            placeholder="List Name"
+            value={listName}
+            onChangeText={setListName}
+          />
+          <TextInput
+            style={styles.item}
+            placeholder="Item #1"
+            value={item1}
+            onChangeText={setItem1}
+          />
+          <TextInput
+            style={styles.item}
+            placeholder="Item #2"
+            value={item2}
+            onChangeText={setItem2}
+          />
+          <TouchableOpacity
+            style={styles.addButton}
+            onPress={() => {
+              const newList = {
+                uid: userID,
+                name: listName,
+                items: [item1, item2],
+              };
+              addShoppingList(newList);
+            }}
+          >
+            <Text style={styles.addButtonText}>Add</Text>
+          </TouchableOpacity>
+        </View>
+      ) : null}
       {Platform.OS === 'android' ? (
         <KeyboardAvoidingView behavior="height" />
       ) : null}
