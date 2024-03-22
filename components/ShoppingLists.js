@@ -84,6 +84,13 @@ const ShoppingLists = ({ db, route, isConnected }) => {
     };
   }, [isConnected]);
 
+  //create a new async function called loadCachedLists()
+  //call this function if the isConnected prop turns out to be false in useEffect()
+  const loadCachedLists = async () => {
+    const cachedLists = (await AsyncStorage.getItem('shopping_lists')) || [];
+    setLists(JSON.parse(cachedLists));
+  };
+
   //use AsyncStorage.setItem() to cach data
   const cacheShoppingLists = async (listsToCache) => {
     try {
