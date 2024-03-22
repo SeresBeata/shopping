@@ -67,24 +67,24 @@ const ShoppingLists = ({ db, route }) => {
       setLists(newLists);
     });
 
-    //use AsyncStorage.setItem() to cach data
-    const cacheShoppingLists = async (listsToCache) => {
-      try {
-        await AsyncStorage.setItem(
-          'shopping_lists',
-          JSON.stringify(listsToCache)
-        );
-      } catch (error) {
-        console.log(error.message);
-      }
-    };
-
     //code to execute when the component will be unmounted
     //add if statement to check if the unsubShoppingLists isn't undefined. This is a protection procedure in case the onSnapshot() function call fails.
     return () => {
       if (unsubShoppinglists) unsubShoppinglists();
     };
   }, []);
+
+  //use AsyncStorage.setItem() to cach data
+  const cacheShoppingLists = async (listsToCache) => {
+    try {
+      await AsyncStorage.setItem(
+        'shopping_lists',
+        JSON.stringify(listsToCache)
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   return (
     <View style={styles.container}>
