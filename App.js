@@ -1,7 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { useEffect } from 'react';
 //To initialize a connection for Firestore import initializeApp() and getFirestore()
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import {
+  getFirestore,
+  disableNetwork,
+  enableNetwork,
+} from 'firebase/firestore';
 // import react Navigation
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -10,13 +15,31 @@ import ShoppingLists from './components/ShoppingLists';
 //import Welcome
 import Welcome from './components/Welcome';
 //import and use Logbox to prevent warning message from appearing
-import { LogBox } from 'react-native';
+import { LogBox, Alert } from 'react-native';
 LogBox.ignoreLogs(['AsyncStorage has been extracted from']);
+//import useNetInfo for network connection state
+import { useNetInfo } from '@react-native-community/netinfo';
 
 // Create the navigator
 const Stack = createNativeStackNavigator();
 
 const App = () => {
+  //define state that represents the network connectivity status
+  const connectionStatus = useNetInfo();
+
+  //use useEffect() to display an alert popup if network connection is lost
+  useEffect(() => {
+    if (connectionStatus.isConnected === false) {
+      Alert.alert('Connection Lost!');
+      //Firebase will keep attempting to reconnect to the Firestore Database.
+      //disable these attempts by calling the Firestore function disableNetwork(db)
+      disableNetwork(db);
+    } else if (connectionStatus.isConnected === true) {
+      //re-enable by calling Firestore function enableNetwork(db)
+      enableNetwork(db);
+    }
+  }, [connectionStatus.isConnected]);
+
   //Firebase configuration
   const firebaseConfig = {
     apiKey: 'AIzaSyCSHiJcNpDgX6Me6n0rFV-LgK4TwbmKo0U',
@@ -39,7 +62,14 @@ const App = () => {
         <Stack.Screen name="Welcome" component={Welcome} />
         <Stack.Screen name="ShoppingLists">
           {/* pass db props to the ShoppingLists component */}
-          {(props) => <ShoppingLists db={db} {...props} />}
+          {/* pass the boolean value of connectionStatus.isConnected to the ShoppingLists component as a prop called isConnected */}
+          {(props) => (
+            <ShoppingLists
+              db={db}
+              isConnected={connectionStatus.isConnected}
+              {...props}
+            />
+          )}
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
