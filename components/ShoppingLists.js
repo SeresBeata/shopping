@@ -20,6 +20,9 @@ import {
   where,
 } from 'firebase/firestore';
 
+//import AsyncStorage for Local Storage
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 //create and export ShoppingLists child component
 const ShoppingLists = ({ db, route }) => {
   //use userID, extract it from route.params
@@ -60,8 +63,21 @@ const ShoppingLists = ({ db, route }) => {
       documentsSnapshot.forEach((doc) => {
         newLists.push({ id: doc.id, ...doc.data() });
       });
+      cacheShoppingLists(newLists);
       setLists(newLists);
     });
+
+    //use AsyncStorage.setItem() to cach data
+    const cacheShoppingLists = async (listsToCache) => {
+      try {
+        await AsyncStorage.setItem(
+          'shopping_lists',
+          JSON.stringify(listsToCache)
+        );
+      } catch (error) {
+        console.log(error.message);
+      }
+    };
 
     //code to execute when the component will be unmounted
     //add if statement to check if the unsubShoppingLists isn't undefined. This is a protection procedure in case the onSnapshot() function call fails.
