@@ -67,7 +67,7 @@ const ShoppingLists = ({ db, route, isConnected }) => {
       );
 
       // code to execute when component mounted or updated
-      const unsubShoppinglists = onSnapshot(q, (documentsSnapshot) => {
+      unsubShoppinglists = onSnapshot(q, (documentsSnapshot) => {
         let newLists = [];
         documentsSnapshot.forEach((doc) => {
           newLists.push({ id: doc.id, ...doc.data() });
